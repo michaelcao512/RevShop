@@ -25,6 +25,9 @@ public class UserService {
         if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new RuntimeException("Email already registered");
         }
+        if (request.userType() != User.UserType.BUYER && request.userType() != User.UserType.SELLER) {
+            throw new RuntimeException("Invalid user type");
+        }
 
         User user = new User();
         user.setEmail(request.email());
