@@ -21,10 +21,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SecurityConfig  {
     @Value("#{'${cors.allowed.origins}'.split(',')}")
     private String[] allowedOrigins;
-    private String[] openApiEndpoints = {"/api/v1/auth/**",
+    private final String[] openApiEndpoints = {"/api/v1/auth/**",
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/v3/api-docs/**"};
+    private final String[] actuatorEndpoints = {"/actuator/**"};
 
     private final JwtRequestFilter jwtRequestFilter;
     public SecurityConfig(JwtRequestFilter jwtRequestFilter) {
@@ -39,6 +40,7 @@ public class SecurityConfig  {
                 .authorizeHttpRequests((authorizeHttpRequest) -> authorizeHttpRequest
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers(openApiEndpoints).permitAll()
+                                .requestMatchers(actuatorEndpoints).permitAll()
                                 .anyRequest().authenticated()
 //                                .anyRequest().permitAll()
                 )

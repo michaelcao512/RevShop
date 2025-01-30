@@ -67,6 +67,10 @@ public class Product {
     @JsonManagedReference(value = "product-inventory")
     private Inventory inventory;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @JsonManagedReference(value = "product-images")
+    private List<Image> images;
 
     @Override
     public final boolean equals(Object o) {
