@@ -3,6 +3,7 @@ package dev.michaelcao512.revshop_springboot.Services;
 import dev.michaelcao512.revshop_springboot.DTO.OrderDto;
 import dev.michaelcao512.revshop_springboot.Entities.*;
 import dev.michaelcao512.revshop_springboot.Repositories.CartRepository;
+import dev.michaelcao512.revshop_springboot.Repositories.NotificationRepository;
 import dev.michaelcao512.revshop_springboot.Repositories.OrderRepository;
 import dev.michaelcao512.revshop_springboot.Repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -17,13 +18,16 @@ public class OrderService {
     private final UserRepository userRepository;
     private final InventoryService inventoryService;
     private final PaymentService paymentService;
+    private final NotificationRepository notificationRepository;
 
-    public OrderService(OrderRepository orderRepository, CartRepository cartRepository, UserRepository userRepository, InventoryService inventoryService, PaymentService paymentService) {
+    public OrderService(OrderRepository orderRepository, CartRepository cartRepository, UserRepository userRepository, InventoryService inventoryService, PaymentService paymentService,
+                        NotificationRepository notificationRepository) {
         this.orderRepository = orderRepository;
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
         this.inventoryService = inventoryService;
         this.paymentService = paymentService;
+        this.notificationRepository = notificationRepository;
     }
 
     public Order createOrder(OrderDto request) {
@@ -67,6 +71,19 @@ public class OrderService {
         }
 
         cartRepository.delete(cart);
+
+        Notification buyerNotification = new Notification();
+        buyerNotification.setUser(buyer);
+        buyerNotification.setMessage("Order processed successfully");
+        buyerNotification.setType(Notification.NotificationType.EMAIL);
+
+        Notification sellerNotification = new Notification();
+        sellerNotification.setUser(savedOrder.getOrderItems().getFirst().getProduct().getSeller());
+        sellerNotification.setMessage("New order received");
+        sellerNotification.setType(Notification.NotificationType.EMAIL);
+
+        notificationRepository.save(buyerNotification);
+        notificationRepository.save(sellerNotification);
 
         return orderRepository.save(order);
     }

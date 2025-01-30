@@ -17,10 +17,13 @@ public class CartItemService {
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
     private final CartRepository cartRepository;
-    public CartItemService(CartItemRepository cartItemRepository, ProductRepository productRepository, CartRepository cartRepository) {
+    private final InventoryService inventoryService;
+
+    public CartItemService(CartItemRepository cartItemRepository, ProductRepository productRepository, CartRepository cartRepository, InventoryService inventoryService) {
         this.cartItemRepository = cartItemRepository;
         this.productRepository = productRepository;
         this.cartRepository = cartRepository;
+        this.inventoryService = inventoryService;
     }
 
     public List<CartItem> getCartItems() {
@@ -54,6 +57,10 @@ public class CartItemService {
 
         if (request.quantity() != null)
             cartItem.setQuantity(request.quantity());
+
+        if(!inventoryService.checkInventory(cartItem.getProduct().getProductId(), cartItem.getQuantity())) {
+            throw new RuntimeException("Not enough inventory");
+        }
         return cartItemRepository.save(cartItem);
     }
 

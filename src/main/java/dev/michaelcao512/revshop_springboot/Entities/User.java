@@ -57,6 +57,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
+    @JsonManagedReference(value = "user-notifications")
     private List<Notification> notifications;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
