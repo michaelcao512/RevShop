@@ -62,4 +62,10 @@ public class ReviewService {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         return reviewRepository.findByProduct(product);
     }
+
+    public List<Review> getReviewsByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return reviewRepository.findByBuyer(user);
+    }
 }

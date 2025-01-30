@@ -1,12 +1,19 @@
 package dev.michaelcao512.revshop_springboot.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Table(name = "orders")
 public class Order {
     @Id
@@ -15,6 +22,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "buyer_id", nullable = false)
+    @JsonBackReference(value = "user-order")
     private User buyer;
 
     @Column(nullable = false)
@@ -32,9 +40,12 @@ public class Order {
 
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "order-orderItems")
+    @ToString.Exclude
     private List<OrderItem> orderItems;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "order-payment")
     private Payment payment;
 
 
@@ -46,5 +57,19 @@ public class Order {
         CANCELLED
     }
 
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Order order = (Order) o;
+        return getOrderId() != null && Objects.equals(getOrderId(), order.getOrderId());
+    }
 
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
 }

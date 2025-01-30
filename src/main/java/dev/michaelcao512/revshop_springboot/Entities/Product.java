@@ -49,6 +49,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
+    @JsonManagedReference(value = "product-orderItems")
     private List<OrderItem> orderItems;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -58,10 +59,12 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
+    @JsonManagedReference(value = "product-favorites")
     private List<Favorite> favorites;
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     @ToString.Exclude
+    @JsonManagedReference(value = "product-inventory")
     private Inventory inventory;
 
 

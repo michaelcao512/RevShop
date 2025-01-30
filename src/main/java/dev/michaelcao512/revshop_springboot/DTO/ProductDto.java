@@ -7,5 +7,5 @@ import java.util.List;
  * DTO for {@link dev.michaelcao512.revshop_springboot.Entities.Product}
  */
 public record ProductDto(Long sellerUserId, String name, String description,
-                         double price, double discountedPrice, List<Long> categoryIds) implements Serializable {
+                         Double price, Double discountedPrice, List<Long> categoryIds, InventoryDto inventoryDto) implements Serializable {
 }
