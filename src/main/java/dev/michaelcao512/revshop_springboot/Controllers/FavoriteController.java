@@ -15,25 +15,31 @@ public class FavoriteController {
         this.favoriteService = favoriteService;
     }
 
+//    get all favorites
     @GetMapping
     public List<Favorite> getAllFavorites() {
         return favoriteService.getAllFavorites();
     }
+
+//    get favorite by id
     @GetMapping("/{favoriteId}")
     public Favorite getFavoriteById(@PathVariable Long favoriteId) {
         return favoriteService.getFavoriteById(favoriteId);
     }
 
-    @PostMapping
+//    users adds product as favorite or remove product from favorite (is Favorite already exists)
+    @PutMapping
     public Favorite addFavorite(@RequestBody FavoriteDto request) {
         return favoriteService.addFavorite(request);
     }
 
+//    get all favorites by product id
     @GetMapping("/product/{productId}")
     public List<Favorite> getFavoritesByProduct(@PathVariable Long productId) {
         return favoriteService.getFavoritesByProduct(productId);
     }
 
+//    get all favorites by user id
     @GetMapping("/user/{userId}")
     public List<Favorite> getFavoritesByUser(@PathVariable Long userId) {
         return favoriteService.getFavoritesByUser(userId);

@@ -1,4 +1,4 @@
-package dev.michaelcao512.revshop_springboot.SpringSecurity;
+package dev.michaelcao512.revshop_springboot.Configurations.SpringSecurity;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +21,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SecurityConfig  {
     @Value("#{'${cors.allowed.origins}'.split(',')}")
     private String[] allowedOrigins;
+    private String[] openApiEndpoints = {"/api/v1/auth/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/v3/api-docs/**"};
 
     private final JwtRequestFilter jwtRequestFilter;
     public SecurityConfig(JwtRequestFilter jwtRequestFilter) {
@@ -33,8 +37,9 @@ public class SecurityConfig  {
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests((authorizeHttpRequest) -> authorizeHttpRequest
-                    .requestMatchers("/api/auth/**").permitAll()
-                    .anyRequest().authenticated()
+                                .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers(openApiEndpoints).permitAll()
+                                .anyRequest().authenticated()
 //                                .anyRequest().permitAll()
                 )
                 .sessionManagement((sessionManagement) -> sessionManagement

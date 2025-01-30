@@ -1,4 +1,4 @@
-package dev.michaelcao512.revshop_springboot.SpringSecurity;
+package dev.michaelcao512.revshop_springboot.Configurations.SpringSecurity;
 
 import dev.michaelcao512.revshop_springboot.Entities.User;
 import dev.michaelcao512.revshop_springboot.Repositories.UserRepository;

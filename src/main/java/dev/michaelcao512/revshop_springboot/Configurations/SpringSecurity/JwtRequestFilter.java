@@ -1,4 +1,4 @@
-package dev.michaelcao512.revshop_springboot.SpringSecurity;
+package dev.michaelcao512.revshop_springboot.Configurations.SpringSecurity;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

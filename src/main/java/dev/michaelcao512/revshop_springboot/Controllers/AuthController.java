@@ -4,8 +4,8 @@ import dev.michaelcao512.revshop_springboot.DTO.LoginRequest;
 import dev.michaelcao512.revshop_springboot.DTO.RegistrationRequest;
 import dev.michaelcao512.revshop_springboot.Entities.User;
 import dev.michaelcao512.revshop_springboot.Services.UserService;
-import dev.michaelcao512.revshop_springboot.SpringSecurity.JwtUtils;
-import dev.michaelcao512.revshop_springboot.SpringSecurity.UserDetailService;
+import dev.michaelcao512.revshop_springboot.Configurations.SpringSecurity.JwtUtils;
+import dev.michaelcao512.revshop_springboot.Configurations.SpringSecurity.UserDetailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +33,7 @@ public class AuthController {
         this.userService = userService;
     }
 
+//    logs user in and return JWT
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest request) {
         authenticationManager.authenticate(
@@ -43,6 +44,7 @@ public class AuthController {
         return ResponseEntity.ok(jwt);
     }
 
+//    registers user given email, password, and user type
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody RegistrationRequest request) {
         log.info("Registering user: {}", request.email());

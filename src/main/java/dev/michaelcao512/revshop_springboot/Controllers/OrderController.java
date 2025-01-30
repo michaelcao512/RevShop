@@ -15,20 +15,25 @@ public class OrderController {
         this.orderService = orderService;
     }
 
+//    gets all orders
     @GetMapping
     public List<Order> getAllOrders() {
         return orderService.getAllOrders();
     }
 
+//    get all orders by buyer id
     @GetMapping("/buyer/{userId}")
     public List<Order> getOrdersByBuyerId(@PathVariable Long userId) {
         return orderService.getOrderByBuyer(userId);
     }
+
+//    get all orders by seller id
     @GetMapping("/seller/{userId}")
     public List<Order> getOrdersBySellerId(@PathVariable Long userId) {
         return orderService.getOrderBySeller(userId);
     }
 
+//    creates an order given a buyer id, cart id, shipping address,  billing address, and paymentDto
     @PostMapping
     public Order createOrder(@RequestBody OrderDto request) {
         return orderService.createOrder(request);
