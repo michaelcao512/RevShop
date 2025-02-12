@@ -15,17 +15,18 @@
     "@fontsource/roboto": "^5.1.1",
     "@hookform/resolvers": "^3.10.0",
     "@mui/material": "^6.4.2",
+    "@react-buddy/ide-toolbox": "^2.4.0",
     "axios": "^1.7.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.2",
     "react-query": "^3.39.3",
     "react-router-dom": "^7.1.5",
-    "zod": "^3.24.1",
-    "@react-buddy/ide-toolbox": "^2.4.0"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@mui/icons-material": "^6.4.4",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
