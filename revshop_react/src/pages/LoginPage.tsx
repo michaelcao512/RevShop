@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {useMutation} from "react-query";
 import Auth from "../api/auth.ts";
 import {useLocation, useNavigate} from "react-router-dom";
+import {FC} from "react";
 
 type LoginFormInputs = {
     email: string;
@@ -24,10 +25,11 @@ const schema = z
     });
 
 
-function LoginPage() {
+const LoginPage: FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const successMessage = location.state?.message;
+
 
     const {
         control,
@@ -43,7 +45,7 @@ function LoginPage() {
             return Auth.login(formData.email, formData.password);
         },
         onSuccess: () => {
-            navigate('/', { state: { message: 'Logged in successfully' } });
+            navigate('/dashboard', { state: { message: 'Logged in successfully' }, replace: true });
         }
     });
 
@@ -104,7 +106,7 @@ function LoginPage() {
                     color="primary"
                     sx={{ mt: 3, mb: 2 }}
                 >
-                    Register
+                    Log in
                 </Button>
 
                 <Typography variant="body2" color="textSecondary" align="center">

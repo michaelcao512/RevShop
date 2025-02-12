@@ -1,7 +1,9 @@
 package dev.michaelcao512.revshop_springboot.Controllers;
 
 import dev.michaelcao512.revshop_springboot.DTO.LoginRequest;
+import dev.michaelcao512.revshop_springboot.DTO.LoginResponse;
 import dev.michaelcao512.revshop_springboot.DTO.RegistrationRequest;
+import dev.michaelcao512.revshop_springboot.DTO.UserDto;
 import dev.michaelcao512.revshop_springboot.Entities.User;
 import dev.michaelcao512.revshop_springboot.Services.UserService;
 import dev.michaelcao512.revshop_springboot.Configurations.SpringSecurity.JwtUtils;
@@ -35,20 +37,22 @@ public class AuthController {
 
 //    logs user in and return JWT
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.email(), request.password())
         );
         final UserDetails userDetails = userDetailService.loadUserByUsername(request.email());
+
+        final UserDto user = userService.getUserByEmail(request.email());
         final String jwt = jwtUtils.generateToken(userDetails);
-        return ResponseEntity.ok(jwt);
+        return ResponseEntity.ok(new LoginResponse(jwt, user.userType(), user.userId()));
     }
 
 //    registers user given email, password, and user type
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegistrationRequest request) {
+    public ResponseEntity<UserDto> register(@RequestBody RegistrationRequest request) {
         log.info("Registering user: {}", request.email());
-        User user = userService.register(request);
+        UserDto user = userService.register(request);
         return ResponseEntity.ok(user);
     }
 

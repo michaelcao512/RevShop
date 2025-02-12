@@ -1,7 +1,4 @@
-
-export const Dashboard = () => {
-
-
+export const Products = () => {
     return (
         <>
         </>

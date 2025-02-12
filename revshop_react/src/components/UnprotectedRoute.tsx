@@ -1,9 +1,8 @@
 import {Navigate, Outlet} from "react-router-dom";
-import React from "react";
 
-const UnprotectedRoute: React.FC<{token: string | null}> = ({token}) => {
-
-    if (token) {
+const UnprotectedRoute = () => {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
         return <Navigate to="/dashboard" replace />;
     }
     return <Outlet />;

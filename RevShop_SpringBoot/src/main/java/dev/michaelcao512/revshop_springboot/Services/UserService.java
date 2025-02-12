@@ -1,6 +1,7 @@
 package dev.michaelcao512.revshop_springboot.Services;
 
 import dev.michaelcao512.revshop_springboot.DTO.RegistrationRequest;
+import dev.michaelcao512.revshop_springboot.DTO.UserDto;
 import dev.michaelcao512.revshop_springboot.Entities.User;
 import dev.michaelcao512.revshop_springboot.Repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,25 +18,32 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
+
+    private UserDto mapUserToUserDto(User user) {
+        return new UserDto(user.getUserId(), user.getEmail(), user.getUserType());
     }
 
-    public User getUserById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public List<UserDto> getUsers() {
+        return userRepository.findAll().stream().map(this::mapUserToUserDto).toList();
     }
 
-    public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
+    public UserDto getUserById(Long userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        return mapUserToUserDto(user);
+    }
+
+    public UserDto getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return mapUserToUserDto(user);
     }
 
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
     }
 
-    public User register(RegistrationRequest request) {
+    public UserDto register(RegistrationRequest request) {
         if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new RuntimeException("Email already registered");
         }
@@ -48,7 +56,9 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.password()));
         user.setUserType(request.userType());
 
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        return mapUserToUserDto(user);
     }
 
 }
